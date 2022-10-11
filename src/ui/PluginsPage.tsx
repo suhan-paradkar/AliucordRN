@@ -74,7 +74,7 @@ function PluginCard({ plugin }: { plugin: PluginManifest; }) {
                                 style={styles.link}
                                 onPress={() => getByProps("showUserProfile").showUserProfile({ userId: a.id })}
                             >
-                                {a.username}{i !== plugin.authors.length - 1 && ","}
+                                {a.name}{i !== plugin.authors.length - 1 && ","}
                             </Text>
                         ))}
                     </View>)}
@@ -95,14 +95,10 @@ function PluginCard({ plugin }: { plugin: PluginManifest; }) {
 }
 
 export default function PluginsPage() {
-    const plugins: PluginManifest[] = Object.values(window.Aliucord.pluginManager.plugins).map((plugin) => (
-        {
-            name: plugin.name,
-            description: plugin.manifest.description,
-            version: plugin.manifest.version,
-            authors: plugin.manifest.authors
-        }
-    ));
+    const plugins: PluginManifest[] = [
+        ...Object.values(window.Aliucord.pluginManager.plugins).map(p => p.manifest),
+        ...Object.values(window.Aliucord.pluginManager.disabledPlugins)
+    ];
     return (
         <View style={styles.container}>
             {!plugins.length ?
